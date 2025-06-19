@@ -1,4 +1,4 @@
-package main
+package env
 
 import (
 	"fmt"
@@ -9,13 +9,13 @@ import (
 )
 
 const (
-	EnvKeyDBHost = "DB_HOST"
-	EnvKeyDBPort = "DB_PORT"
-	EnvKeyDBUser = "DB_USER"
-	EnvKeyDBPass = "DB_PASS"
-	EnvKeyDBName = "DB_NAME"
+	KeyDBHost = "DB_HOST"
+	KeyDBPort = "DB_PORT"
+	KeyDBUser = "DB_USER"
+	KeyDBPass = "DB_PASS"
+	KeyDBName = "DB_NAME"
 
-	EnvKeyDBMigrationPath = "MIGRATIONS_PATH"
+	KeyDBMigrationPath = "MIGRATIONS_PATH"
 )
 
 const (
@@ -29,16 +29,16 @@ const (
 )
 
 var (
-	dbHost string
-	dbPort string
-	dbUser string
-	dbPass string
-	dbName string
+	DBHost string
+	DBPort string
+	DBUser string
+	DBPass string
+	DBName string
 
-	dbMigrationPath string
+	DBMigrationPath string
 
-	dbAddr string
-	dbDSN  string
+	DBAddr string
+	DBDSN  string
 )
 
 // MustLoadEnv loads environment variables from .env.example and .env files.
@@ -48,19 +48,20 @@ func MustLoadEnv() {
 	_ = godotenv.Load(".env.example")
 	_ = godotenv.Load(".env")
 
-	dbHost = orEnv(EnvKeyDBHost, defaultDBHost)
-	dbPort = orEnv(EnvKeyDBPort, defaultDBPort)
-	dbUser = orEnv(EnvKeyDBUser, defaultDBUser)
-	dbPass = orEnv(EnvKeyDBPass, defaultDBPass)
-	dbName = orEnv(EnvKeyDBName, defaultDBName)
-	dbMigrationPath = orEnv(EnvKeyDBMigrationPath, defaultDBMigrationPath)
+	DBHost = orEnv(KeyDBHost, defaultDBHost)
+	DBPort = orEnv(KeyDBPort, defaultDBPort)
+	DBUser = orEnv(KeyDBUser, defaultDBUser)
+	DBPass = orEnv(KeyDBPass, defaultDBPass)
+	DBName = orEnv(KeyDBName, defaultDBName)
+	DBMigrationPath = orEnv(KeyDBMigrationPath, defaultDBMigrationPath)
 
-	dbAddr = fmt.Sprintf("%s:%s", dbHost, dbPort)
-	dbDSN = fmt.Sprintf("clickhouse://%s:%s@%s/%s", dbUser, dbPass, dbAddr, dbName)
+	DBAddr = fmt.Sprintf("%s:%s", DBHost, DBPort)
+	DBDSN = fmt.Sprintf("clickhouse://%s:%s@%s/%s", DBUser, DBPass, DBAddr, DBName)
 }
 
 // orEnv retrieves an environment variable value or uses a default if empty.
 // It logs a warning when falling back to the default value.
+//
 // Parameters:
 //   - envKey: Name of the environment variable to retrieve
 //   - defaultValue: Value to use if environment variable is not set

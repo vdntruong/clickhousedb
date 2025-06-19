@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"clickhousedb/infra/env"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
@@ -35,11 +37,11 @@ func MustLoadClickHouseConn() driver.Conn {
 
 func dbOptions() *clickhouse.Options {
 	return &clickhouse.Options{
-		Addr: []string{fmt.Sprintf("%s:%s", dbHost, dbPort)},
+		Addr: []string{fmt.Sprintf("%s:%s", env.DBHost, env.DBPort)},
 		Auth: clickhouse.Auth{
-			Database: dbName,
-			Username: dbUser,
-			Password: dbPass,
+			Database: env.DBName,
+			Username: env.DBUser,
+			Password: env.DBPass,
 		},
 	}
 }
@@ -90,11 +92,11 @@ func LoadClickHouseDB(opts *clickhouse.Options) (*sql.DB, error) {
 //
 // Note: No error is returned if no new migrations are available to apply.
 func Migrate() error {
-	if _, err := os.Stat(dbMigrationPath); os.IsNotExist(err) {
-		return fmt.Errorf("migrations directory not found: %s", dbMigrationPath)
+	if _, err := os.Stat(env.DBMigrationPath); os.IsNotExist(err) {
+		return fmt.Errorf("migrations directory not found: %s", env.DBMigrationPath)
 	}
 
-	m, err := migrate.New("file://"+dbMigrationPath, dbDSN)
+	m, err := migrate.New("file://"+env.DBMigrationPath, env.DBDSN)
 	if err != nil {
 		return fmt.Errorf("failed to initialize migrate instance: %w", err)
 	}
