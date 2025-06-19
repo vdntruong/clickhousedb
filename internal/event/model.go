@@ -20,12 +20,12 @@ type Record struct {
 }
 
 type Option struct {
-	Name   string `json:"name"`
-	Type   string `json:"type"`
-	Action string `json:"action"`
+	Name   string `json:"name" ch:"name"`
+	Type   string `json:"type" ch:"type"`
+	Action string `json:"action" ch:"action"`
 }
 
 type Detail struct {
-	Source string `json:"source"`
-	Target string `json:"target"`
+	Source string `json:"source" ch:"source"`
+	Target string `json:"target" ch:"target"`
 }

@@ -1,18 +1,20 @@
 package main
 
 import (
-	"clickhousedb/db"
-	"clickhousedb/infra/env"
-	"clickhousedb/internal/event"
 	"context"
 	"fmt"
 	"log"
 	"time"
+
+	"clickhousedb/db"
+	"clickhousedb/infra/env"
+	"clickhousedb/internal/event"
 )
 
 func main() {
 	log.Println("Starting application...")
 	env.MustLoadEnv()
+	// TODO: fix this
 	env.DBMigrationPath = "/Volumes/external/Dev/go/clickhousedb/db/migrations"
 
 	if err := db.Migrate(); err != nil {
@@ -68,6 +70,6 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Errorf("failed to get event: %w", err))
 	}
-	fmt.Println(e)
 
+	fmt.Println(e)
 }
